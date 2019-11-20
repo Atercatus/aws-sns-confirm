@@ -23,6 +23,7 @@ app.use((req,res,next)=>{
   }
   next();
 });
+app.use(bodyParser.text());
 app.use(bodyParser.json({limit:'50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 
@@ -30,11 +31,17 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 //app.use(express.urlencoded({ extended: false }));
 
 app.post("/", (req, res) => {
-  const options = {
-    TopicArn: req.headers["x-amz-sns-topic-arn"],
-    Token: req.body.Token
-  };
+//  처음 구독인증을 위해 필요한 소스
+//  const options = {
+//    TopicArn: req.headers["x-amz-sns-topic-arn"],
+//    Token: req.body.Token
+//  };
 
+  const {state, outputKeyPrefix, outputs, playlists} = req.body;
+
+  const manifestUrl = `${outputKeyPrefix}`
+ 
+  console.log(req.body);
   console.log(options);
   sns.confirmSubscription(options);
   res.send(); 
