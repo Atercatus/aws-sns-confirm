@@ -23,17 +23,27 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(bodyParser.text()); // 구독 이후에 사용됨
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
 
 app.post("/", (req, res) => {
-  const options = {
-    TopicArn: req.headers["x-amz-sns-topic-arn"],
-    Token: req.body.Token
-  };
+  //  처음 구독인증을 위해 필요한 소스
+  //  const options = {
+  //    TopicArn: req.headers["x-amz-sns-topic-arn"],
+  //    Token: req.body.Token
+  //  };
 
-  console.log(options);
-  sns.confirmSubscription(options);
+  const { state, outputKeyPrefix, outputs, playlists } = req.body;
+  const playlistName = playlists[0].name;
+
+  const manifestUrl = `https://${process.env.BUCKET_NAME}-${process.env.REGION}.amazonaws.com/${outputKeyPrefix}${playlistName}.mpd`;
+  console.log(manifestUrl);
+
+  console.log(req.body);
+
+  // sns.confirmSubscription(options);
   res.send();
 });
 
