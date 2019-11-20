@@ -38,7 +38,7 @@ app.post("/", (req, res) => {
   const { state, outputKeyPrefix, outputs, playlists } = req.body;
   const playlistName = playlists[0].name;
 
-  const manifestUrl = `https://${process.env.BUCKET_NAME}-${process.env.REGION}.amazonaws.com/${outputKeyPrefix}${playlistName}.mpd`;
+  const manifestUrl = `https://${process.env.BUCKET_NAME}.s3-${process.env.BUCKET_REGION}.amazonaws.com/${outputKeyPrefix}${playlistName}.mpd`;
   console.log(manifestUrl);
 
   console.log(req.body);
